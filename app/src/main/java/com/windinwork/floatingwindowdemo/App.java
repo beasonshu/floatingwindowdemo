@@ -7,7 +7,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 public class App extends Application {
     private static final String FRAGMENT_TAG = "FRAGMENT_TAG";
@@ -19,11 +21,20 @@ public class App extends Application {
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                ViewGroup contentView= (ViewGroup)activity.getWindow().getDecorView();
+                FloatingWindow fw = new FloatingWindow(activity);
+                fw.setCallBack(new FloatingWindow.CallBack() {
+                    @Override
+                    public void click(View view) {
+                        Toast.makeText(view.getContext(),"click",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                contentView.addView(fw, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-                if (activity instanceof FragmentActivity) {
+                /*if (activity instanceof FragmentActivity) {
                     FragmentManager fm = ((FragmentActivity) activity).getSupportFragmentManager();
                     fm.beginTransaction().add(new SupportFragment(), FRAGMENT_TAG).commitAllowingStateLoss();
-                }
+                }*/
             }
 
             @Override
@@ -67,8 +78,15 @@ public class App extends Application {
             Activity activity = getActivity();
             if (activity != null) {
                 FloatingWindow fw = new FloatingWindow(activity);
+                fw.setCallBack(new FloatingWindow.CallBack() {
+                    @Override
+                    public void click(View view) {
+                        Toast.makeText(view.getContext(),"click",Toast.LENGTH_SHORT).show();
+                    }
+                });
                 activity.addContentView(fw, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             }
         }
     }
+
 }
