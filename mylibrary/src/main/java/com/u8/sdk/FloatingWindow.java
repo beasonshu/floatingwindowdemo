@@ -1,8 +1,9 @@
-package com.windinwork.floatingwindowdemo;
+package com.u8.sdk;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -13,9 +14,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.FrameLayout;
-import android.widget.PopupWindow;
 
 public class FloatingWindow extends FrameLayout {
 

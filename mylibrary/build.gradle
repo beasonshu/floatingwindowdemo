@@ -1,0 +1,61 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        minSdkVersion 23
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+    task deleteOldJar(type: Delete){
+        delete 'target/*.jar'
+    }
+
+
+    def SDK_OUTPATH = "target/";//生成Jar的目录
+    //生成未混淆的Jar
+    task fake_tools(type: Jar) {
+        // delete SDK_OUTPATH+SDK_DEBUG_BASENAME+'.jar'//删除原来的jar
+        //包括子module额class文件
+        //from('../iwcollector/build/intermediates/javac/debug/classes')
+        from('build/intermediates/javac/debug/classes')
+        //from(project.zipTree('..\\iwsdk\\libs\\open_sdk_r6019_lite.jar'))
+        // from(project.zipTree('..\\iwsdk\\libs\\wechat-sdk-android-without-mta-5.4.3.jar'))
+        //from('../u8sdk/build/intermediates/javac/debug/classes')
+        // from(project.zipTree('..\\u8sdk\\libs\\protobuf-lite-3.0.0.jar'))//合并其他Jar
+        //去掉不需要打包的目录和文件
+        exclude { it.name.equals('BuildConfig.class'); }
+        //去掉R$开头的文件
+        exclude { it.name.startsWith('R$'); }
+        baseName = "fake_tools"
+        destinationDir = file(SDK_OUTPATH)
+    }
+    fake_tools.dependsOn(deleteOldJar, build)
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api project(":mockApp")
+}

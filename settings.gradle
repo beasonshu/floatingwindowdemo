@@ -1,1 +1,3 @@
+include ':mockApp'
+include ':mylibrary'
 include ':app'
